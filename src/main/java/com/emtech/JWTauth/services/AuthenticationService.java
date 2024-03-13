@@ -142,30 +142,33 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse register(User request) {
-
-        // check if user already exist. if exist than authenticate the user
-        if(repository.findByEmail(request.getEmail()).isPresent()) {
-            return new AuthenticationResponse(null, "User already exist");
+        // Check if the user already exists
+        Optional<User> existingUser = repository.findByEmail(request.getEmail());
+        if (existingUser.isPresent()) {
+            // If the user exists, return a message indicating that the user is already in the system
+            return new AuthenticationResponse( "User already exists in the system");
         }
 
+        // If the user does not exist, proceed with the registration process
         User user = new User();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-
-
         user.setRole(request.getRole());
 
         user = repository.save(user);
 
+        // Generate a JWT token for the newly registered user
         String jwt = jwtService.generateToken(user);
 
+        // Save the user token
         saveUserToken(jwt, user);
 
-        return new AuthenticationResponse(jwt, "User registration was successful");
-
+        // Return the JWT token in the response
+        return new AuthenticationResponse(jwt);
     }
+
 
     public AuthenticationResponse authenticate(User request) {
         authenticationManager.authenticate(
@@ -181,8 +184,7 @@ public class AuthenticationService {
         revokeAllTokenByUser(user);
         saveUserToken(jwt, user);
 
-        return new AuthenticationResponse(jwt, "User login was successful");
-
+        return new AuthenticationResponse(jwt);
     }
     private void revokeAllTokenByUser(User user) {
         List<Token> validTokens = tokenRepository.findAllTokensByUser(user.getId());
