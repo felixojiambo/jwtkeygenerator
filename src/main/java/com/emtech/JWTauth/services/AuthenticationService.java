@@ -146,6 +146,7 @@ public class AuthenticationService {
         Optional<User> existingUser = repository.findByEmail(request.getEmail());
         if (existingUser.isPresent()) {
             // If the user exists, return a message indicating that the user is already in the system
+
             return new AuthenticationResponse( "User already exists in the system");
         }
 
