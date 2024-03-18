@@ -122,7 +122,7 @@ public AuthenticationResponse register(RegistrationDTO request) {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // Find the user by email
-        User user = repository.findByEmail(request.getEmail())
+        User user = repository.findByEmail(request.getUsername())
                 .orElseThrow(() -> new UserNotFoundException("User not found with email: " + request.getEmail()));
 
         // Generate a JWT token for the user
