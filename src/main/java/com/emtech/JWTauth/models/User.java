@@ -1,7 +1,7 @@
 package com.emtech.JWTauth.models;
 
+import com.emtech.JWTauth.dtos.AuthenticationResponse;
 import jakarta.persistence.*;
-
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+
 @Data
 @Entity
 @Table(name = "user")
@@ -35,10 +36,8 @@ public class User implements UserDetails {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
-
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
-
 
     @Override
     public boolean isAccountNonExpired() {
@@ -60,8 +59,6 @@ public class User implements UserDetails {
         return true;
     }
 
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
@@ -72,8 +69,18 @@ public class User implements UserDetails {
         return email;
     }
 
-
     public String getEmail() {
         return email;
+    }
+
+    // Method to create an Entity object from the User details
+    public AuthenticationResponse.Entity toEntity(String jwt, String bearer) {
+        return new AuthenticationResponse.Entity(
+                this.id,
+                this.email,
+                this.role.name(), // Convert the role enum to a string
+                jwt,
+                bearer
+        );
     }
 }
