@@ -1,33 +1,29 @@
 package com.emtech.JWTauth.dtos;
 
+import com.emtech.JWTauth.models.Role;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuthenticationResponse {
-//    private String token;
-//    private String message;
-//
-//    public AuthenticationResponse(String token, String message) {
-//        this.token = token;
-//        this.message = message;
-//    }
-//
-//    public String getToken() {
-//        return token;
-//    }
-//
-//    public String getMessage() {
-//        return message;
-//    }
-private String jwt;
+    private String message; // The message from the server
+    private Entity entity; // The entity containing user details
+    private int statusCode; // The status code of the response
 
-    public AuthenticationResponse(String jwt) {
-        this.jwt = jwt;
-    }
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Entity {
+        private int id; // The user's ID
+        private String email; // The user's email
+        private String role; // The user's role
+        private String access_token; // The access token
+        private String tokenType; // The type of the token, typically "Bearer"
 
-    public String getJwt() {
-        return jwt;
-    }
-
-    public void setJwt(String jwt) {
-        this.jwt = jwt;
+        public Entity(Integer id, String email, Role role, String jwt, String bearer) {
+        }
     }
 }

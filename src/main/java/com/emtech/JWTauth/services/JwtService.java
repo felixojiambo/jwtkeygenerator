@@ -1,5 +1,5 @@
 package com.emtech.JWTauth.services;
-
+import javax.crypto.spec.SecretKeySpec;
 import com.emtech.JWTauth.models.User;
 import com.emtech.JWTauth.repository.TokenRepository;
 import io.jsonwebtoken.Claims;
@@ -11,6 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -76,9 +79,12 @@ public class JwtService {
         return token;
     }
 
-    private SecretKey getSigninKey() {
+    public SecretKey getSigninKey() {
         byte[] keyBytes = Decoders.BASE64URL.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
+
+
 
 }
