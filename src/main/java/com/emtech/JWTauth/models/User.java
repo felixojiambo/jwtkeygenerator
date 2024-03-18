@@ -69,9 +69,6 @@ public class User implements UserDetails {
         return email;
     }
 
-    public String getEmail() {
-        return email;
-    }
 
     // Method to create an Entity object from the User details
     public AuthenticationResponse.Entity toEntity(String jwt, String bearer) {
