@@ -42,7 +42,9 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        req->req.requestMatchers("/login/**","/register/**")
+                        req->req.requestMatchers("/login/**","/register/**",
+                                        "/api/v1/auth/**","/v2/api-docs","/v3/api-docs/**",
+                                        "/v3/api-docs","/swagger-resources","/swagger-resources/**","/configuration/ui","/configuration/security","/webjars/**","/swagger-ui.html"    )
                                 .permitAll()
                                 .requestMatchers("/admin_only/**").hasAuthority("ADMIN")
                                 .anyRequest()
